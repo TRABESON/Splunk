@@ -1,0 +1,9 @@
+| metadata type=hosts index=cisco_ios_pci2
+| eval bulle="2" 
+| eval nowTime=now() 
+| eval delta=nowTime-recentTime 
+| sort - delta 
+| where delta>432000 AND totalCount>0 
+| eval deltaday=round  (delta/60/60/24,0) 
+| convert timeformat="%d/%m/%Y %H:%M:%S" ctime(recentTime) ctime(firstTime) ctime(lastTime)  ctime(nowTime)
+| eval subnet=case(cidrmatch("10.20.0.0/14",host), "Collect Switches 10.20/14", cidrmatch("10.0.6.0/24",host), "Admin Switches 10.0.6/24")
